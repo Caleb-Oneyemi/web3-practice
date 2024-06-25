@@ -1,0 +1,7 @@
+{
+  "name": "web3-practice",
+  "packageManager": "yarn@4.0.2",
+  "devDependencies": {
+    "hardhat": "^2.22.5"
+  }
+}
