@@ -13,3 +13,13 @@ node_modules
 
 #!.yarn/cache
 .pnp.*
+
+.env
+coverage
+coverage.json
+typechain
+typechain-types
+
+# Hardhat files
+cache
+artifacts
