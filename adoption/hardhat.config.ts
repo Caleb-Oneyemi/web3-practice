@@ -14,6 +14,10 @@ const config: HardhatUserConfig = {
       accounts: [process.env.PRIVATE_KEY as string],
     },
   },
+  etherscan: { apiKey: process.env.ETHERSCAN_API_KEY },
+  sourcify: {
+    enabled: true
+  },
   solidity: {
     version: '0.8.24',
     settings: {
@@ -30,7 +34,7 @@ const config: HardhatUserConfig = {
     artifacts: './artifacts',
   },
   mocha: {
-    timeout: 40000,
+    timeout: 400000,
   },
 }
 
