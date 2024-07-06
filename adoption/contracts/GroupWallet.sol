@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.26;
+pragma solidity ^0.8.19;
 contract GroupWallet {
     address public manager;
     mapping(address => Benficiary) public beneficiaries;

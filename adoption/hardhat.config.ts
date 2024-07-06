@@ -16,7 +16,7 @@ const config: HardhatUserConfig = {
   },
   etherscan: { apiKey: process.env.ETHERSCAN_API_KEY },
   sourcify: {
-    enabled: true
+    enabled: true,
   },
   solidity: {
     version: '0.8.24',
