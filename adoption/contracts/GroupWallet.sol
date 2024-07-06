@@ -11,7 +11,7 @@ contract GroupWallet {
     }
 
     modifier onlyManger() {
-        manager == msg.sender;
+        require(manager == msg.sender, 'unauthorized!!!');
         _;
     }
 
