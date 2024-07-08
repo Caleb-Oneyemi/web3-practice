@@ -23,7 +23,12 @@ contract MyGameAssets is ERC1155, Ownable {
         _mint(account, id, amount, data);
     }
 
-    function burn(address account, uint8 id, uint256 amount) public onlyOwner {
+    function burn(address account, uint8 id, uint256 amount) public {
+        //sender is either the account that owns the tokens or the contract owner
+        require(
+            msg.sender == account || msg.sender == owner(),
+            'not authorized'
+        );
         _burn(account, id, amount);
     }
 }
