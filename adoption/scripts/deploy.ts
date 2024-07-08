@@ -5,10 +5,10 @@ const main = async () => {
 
   console.log('Deployer ---', deployer.address)
 
-  const adoption = await hre.ethers.deployContract('Adoption')
-  await adoption.waitForDeployment()
+  const gw = await hre.ethers.deployContract('GroupWallet')
+  await gw.waitForDeployment()
 
-  const addr = await adoption.getAddress()
+  const addr = await gw.getAddress()
 
   console.log(`Contract successfully deployed.\nContract address : ${addr}`)
 }
