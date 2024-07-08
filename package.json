@@ -4,7 +4,7 @@
     "test": "hardhat test --config hardhat.ts",
     "deploy": "hardhat run scripts/deploy.ts --network sepolia",
     "verify": "hardhat verify --network sepolia",
-    "compile": "hardhat compile"
+    "build": "tsc && hardhat compile"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-chai-matchers": "^2.0.0",

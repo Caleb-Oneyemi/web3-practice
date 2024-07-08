@@ -1,5 +1,5 @@
 import { loadFixture } from '@nomicfoundation/hardhat-toolbox/network-helpers'
-import chai, { expect } from 'chai'
+import { expect } from 'chai'
 import { ethers } from 'hardhat'
 
 describe('Adoption', () => {

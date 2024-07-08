@@ -1,8 +1,8 @@
-const { expect } = require('chai')
-const { ethers } = require('hardhat')
+import { expect } from 'chai'
+import { ethers } from 'hardhat'
 
 describe('Counter', () => {
-  let counter
+  let counter: any
 
   beforeEach(async () => {
     const Counter = await ethers.getContractFactory('Counter')
@@ -21,7 +21,7 @@ describe('Counter', () => {
   })
 
   it('should decrement the count', async () => {
-    await counter.increment()
+    await counter.decrement()
     const count = await counter.getCount()
     expect(count).to.equal(-1, 'count should be -1')
   })
