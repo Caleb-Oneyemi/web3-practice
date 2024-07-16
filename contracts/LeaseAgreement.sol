@@ -17,7 +17,7 @@ contract LeaseAgreement {
     }
 
     struct Lease {
-        address payable landlaord;
+        address payable landlord;
         address payable tenant;
         string location;
         uint term;
@@ -55,7 +55,7 @@ contract LeaseAgreement {
         string memory _location
     ) {
         state = LeaseState.Created;
-        lease.landlaord = payable(msg.sender);
+        lease.landlord = payable(msg.sender);
         lease.rent = _rent;
         lease.term = _term;
         lease.securityDeposit = _securityDeposit;
@@ -70,7 +70,7 @@ contract LeaseAgreement {
     }
 
     modifier onlyLandlord() {
-        if (msg.sender != lease.landlaord) revert();
+        if (msg.sender != lease.landlord) revert();
         _;
     }
 
@@ -105,5 +105,60 @@ contract LeaseAgreement {
     function moveIn() public onlyTenant inState(LeaseState.Signed) {
         lease.moveinTimestamp = block.timestamp;
         state = LeaseState.Occupied;
+    }
+
+    function payRent()
+        public
+        payable
+        onlyTenant
+        inState(LeaseState.Occupied)
+        payInFull(msg.value + balance)
+    {
+        totalReceived++;
+        balance += msg.value - lease.rent;
+        deposits.push(Deposit({sequence: totalReceived, amount: msg.value}));
+
+        lease.landlord.transfer(msg.value);
+        emit rentPaid(msg.sender, block.timestamp);
+    }
+
+    function leaseDue() public onlyLandlord inState(LeaseState.Occupied) {
+        //if lease term is due, return security deposit to the tenant, and the rest to landlord;
+        require(totalReceived >= lease.term);
+
+        state = LeaseState.Terminated;
+        lease.tenant.transfer(securityDeposited);
+        lease.landlord.transfer(address(this).balance);
+
+        emit leaseTerminated(lease.landlord, 'lease due', block.timestamp);
+    }
+
+    function evict() public onlyLandlord inState(LeaseState.Occupied) {
+        //if missing rent pay, start the eviction; return the balance to the landlord;
+        require(totalReceived < lease.term && balance < lease.rent);
+
+        state = LeaseState.Terminated;
+        lease.landlord.transfer(address(this).balance);
+
+        emit leaseTerminated(lease.landlord, 'eviction', block.timestamp);
+    }
+
+    function terminateEarly()
+        public
+        payable
+        onlyTenant
+        inState(LeaseState.Occupied)
+    {
+        //tenant termintes the lease early, pay penalty; return the balance to landlord
+        require(totalReceived < lease.term && msg.value >= lease.earlyPenalty);
+
+        state = LeaseState.Terminated;
+        lease.landlord.transfer(address(this).balance);
+
+        emit leaseTerminated(
+            lease.tenant,
+            'early termination',
+            block.timestamp
+        );
     }
 }
